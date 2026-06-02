@@ -5,6 +5,7 @@ steps = [
     "python3 src/profiling/profile_dataset.py",
     "python3 src/profiling/anomaly_detection.py",
     "python3 src/drift/drift_detection.py",
+    "python3 src/alerts/email_alert.py"
 ]
 
 for step in steps:
