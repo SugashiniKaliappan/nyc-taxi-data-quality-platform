@@ -5,7 +5,8 @@ from pathlib import Path
 from email.mime.text import MIMEText
 from dotenv import load_dotenv
 
-BASE_DIR = Path("/Users/sugashinikaliappan/nyc-taxi-data-quality-platform")
+#BASE_DIR = Path("/Users/sugashinikaliappan/nyc-taxi-data-quality-platform")
+BASE_DIR = Path(__file__).resolve().parents[2]
 REPORT_FILE = BASE_DIR / "data/reports/quality_report_2024_01.json"
 
 load_dotenv(BASE_DIR / ".env")
