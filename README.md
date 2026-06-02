@@ -1,39 +1,26 @@
 # NYC Taxi Data Quality Platform
 
-## Overview
+End-to-end Data Quality Engineering platform built on the NYC Yellow Taxi dataset.
 
-The NYC Taxi Data Quality Platform is an automated Data Engineering solution designed to profile, validate, monitor, and detect anomalies in large-scale taxi trip datasets.
+The platform performs:
 
-The platform processes millions of NYC Yellow Taxi records and performs automated quality assessments through rule-based validation, statistical profiling, anomaly detection, data drift monitoring, and threshold-based email alerting.
-
-The project demonstrates real-world Data Engineering practices commonly used in modern data platforms to ensure data reliability, trustworthiness, and operational excellence.
-
----
-
-## Key Features
-
-* Data profiling
-* Rule-based data quality validation
-* Failed record isolation
-* Quality score calculation
-* Statistical anomaly detection
-* Data drift detection
-* Threshold-based email alerts
-* GitHub Actions automation
-* Streamlit dashboard
+- Data Validation
+- Data Profiling
+- Anomaly Detection
+- Data Drift Detection
+- Email Alerting
+- Interactive Dashboarding
+- Automated CI/CD Execution with GitHub Actions
 
 ---
 
-## Architecture
+# Project Architecture
 
 ```text
-Raw Taxi Dataset
+NYC Taxi Dataset
         │
         ▼
-Data Quality Validation
-        │
-        ▼
-Failed Record Repository
+Quality Validation
         │
         ▼
 Data Profiling
@@ -45,173 +32,156 @@ Anomaly Detection
 Drift Detection
         │
         ▼
-Quality Report Generation
+Email Alert Evaluation
         │
         ▼
-Threshold Evaluation
+JSON Reports
         │
         ▼
-Email Alert Notification
-        │
-        ▼
-Dashboard / Monitoring
+Streamlit Dashboard
 ```
 
 ---
 
-## Dataset
+# Features
 
-### Source
+## Data Quality Validation
 
-NYC Taxi & Limousine Commission (TLC)
+Business rules validation:
 
-### Dataset Used
+- Pickup before Dropoff
+- Positive Trip Distance
+- Non-Negative Fare Amount
+- Valid Passenger Count
 
-Yellow Taxi Trip Records
+Outputs:
 
-### Sample Period
-
-* January 2024
-* February 2024
-
-### Scale
-
-* ~2.96 million records per month
-* 19 columns
-* Numerical and categorical trip attributes
+- Quality Report
+- Failed Records Dataset
+- Quality Score
 
 ---
 
-## Data Quality Rules
+## Data Profiling
 
-Implemented validation rules:
+Generates:
 
-| Rule                   | Description                                    | Severity |
-| ---------------------- | ---------------------------------------------- | -------- |
-| Pickup Before Dropoff  | Pickup time should be before dropoff time      | HIGH     |
-| Positive Trip Distance | Trip distance should be greater than zero      | HIGH     |
-| Non-Negative Fare      | Fare amount should not be negative             | HIGH     |
-| Valid Passenger Count  | Passenger count should be between valid limits | MEDIUM   |
+- Data Types
+- Null Counts
+- Null Percentages
+- Distinct Counts
+- Min Values
+- Max Values
+- Mean Values
+- Median Values
 
----
+Outputs:
 
-## Sample Quality Results
-
-| Metric         |     Value |
-| -------------- | --------: |
-| Total Records  | 2,964,624 |
-| Rules Executed |         4 |
-| Rules Failed   |         3 |
-| Quality Score  |    98.91% |
-
-Failed records are stored separately under:
-
-```text
-data/processed/failed_records/
-```
+- Profile Report
 
 ---
 
 ## Anomaly Detection
 
-The platform identifies statistical outliers using the Interquartile Range method.
+Uses IQR-based outlier detection.
 
-### Method
+Monitored columns:
 
-```text
-Upper Bound = Q3 + 1.5 × IQR
-Lower Bound = Q1 - 1.5 × IQR
-```
+- Trip Distance
+- Fare Amount
+- Tip Amount
+- Tolls Amount
+- Total Amount
 
-Analyzed features:
+Outputs:
 
-* Trip Distance
-* Fare Amount
-* Tip Amount
-* Tolls Amount
-* Total Amount
-
-### Example Findings
-
-| Feature       | Outliers Detected |
-| ------------- | ----------------: |
-| Trip Distance |           382,745 |
-| Fare Amount   |           318,801 |
-| Total Amount  |           363,621 |
+- Anomaly Report
+- Outlier Counts
+- Upper and Lower Bounds
 
 ---
 
 ## Data Drift Detection
 
-The drift module compares January 2024 and February 2024 taxi datasets to detect distribution changes.
-
-Drift monitoring helps identify:
-
-* Feature distribution shifts
-* Upstream ingestion changes
-* Seasonal behavior changes
-* Data instability over time
-
-Output:
+Compares:
 
 ```text
-data/reports/drift_report_jan_vs_feb.json
+January Dataset
+        vs
+February Dataset
 ```
+
+Monitors:
+
+- Mean Drift
+- Median Drift
+- Distribution Changes
+
+Outputs:
+
+- Drift Report
 
 ---
 
 ## Email Alerting
 
-The platform includes threshold-based email alerts.
-
-An alert is triggered when:
+Automatic email alerts are triggered when:
 
 ```text
-Quality Score < Configured Threshold
+Quality Score < Threshold
 OR
-One or more rules fail
+Validation Rules Fail
 ```
 
-Example threshold:
+Example:
 
 ```text
-QUALITY_SCORE_THRESHOLD=99.0
+Dataset: yellow_tripdata_2024-01
+
+Quality Score: 98.91%
+
+Failed Rules:
+- positive_trip_distance
+- non_negative_fare
+- valid_passenger_count
 ```
-
-Since the current quality score is 98.91%, the email alert is triggered successfully.
-
-### Alert Contents
-
-The email alert includes:
-
-* Dataset name
-* Total records processed
-* Quality score
-* Threshold value
-* Number of failed rules
-* Failed rule names
-* Severity
-* Owner
-* Failed record counts
-
-### Environment Variables
-
-Create a `.env` file locally:
-
-```env
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your_email@gmail.com
-SMTP_PASSWORD=your_gmail_app_password
-ALERT_RECIPIENT=recipient_email@gmail.com
-QUALITY_SCORE_THRESHOLD=99.0
-```
-
-Do not commit `.env` to GitHub.
 
 ---
 
-## Project Structure
+## Dashboard
+
+Interactive Streamlit dashboard provides:
+
+### Quality Monitoring
+
+- Quality Score
+- Rules Executed
+- Rules Failed
+
+### Profiling Insights
+
+- Null Percentages
+- Distinct Counts
+- Statistical Summaries
+
+### Anomaly Monitoring
+
+- Outlier Counts
+- IQR Boundaries
+
+### Drift Monitoring
+
+- January vs February Comparison
+- Distribution Drift
+
+### Alert Monitoring
+
+- Alert Status
+- Threshold Breaches
+
+---
+
+# Project Structure
 
 ```text
 nyc-taxi-data-quality-platform/
@@ -219,6 +189,11 @@ nyc-taxi-data-quality-platform/
 ├── .github/
 │   └── workflows/
 │       └── data-quality-pipeline.yml
+│
+├── data/
+│   ├── raw/
+│   ├── processed/
+│   └── reports/
 │
 ├── src/
 │   ├── validation/
@@ -235,11 +210,6 @@ nyc-taxi-data-quality-platform/
 │   └── alerts/
 │       └── email_alert.py
 │
-├── data/
-│   ├── raw/
-│   ├── processed/
-│   └── reports/
-│
 ├── dashboard.py
 ├── run_pipeline.py
 ├── requirements.txt
@@ -248,125 +218,277 @@ nyc-taxi-data-quality-platform/
 
 ---
 
-## Automation
+# Dataset
 
-### Local Pipeline
+Source:
 
-Run the full pipeline locally:
+NYC Taxi & Limousine Commission (TLC)
+
+Files used:
+
+```text
+yellow_tripdata_2024-01.parquet
+yellow_tripdata_2024-02.parquet
+```
+
+Official Source:
+
+https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page
+
+---
+
+# Installation
+
+Clone repository:
+
+```bash
+git clone https://github.com/SugashiniKaliappan/nyc-taxi-data-quality-platform.git
+
+cd nyc-taxi-data-quality-platform
+```
+
+Create virtual environment:
+
+```bash
+python3 -m venv venv
+
+source venv/bin/activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+# Running the Pipeline
+
+Execute complete pipeline:
 
 ```bash
 python3 run_pipeline.py
 ```
 
-Pipeline stages:
+Pipeline execution order:
 
 ```text
-quality_checks
-profiling
-anomaly_detection
-drift_detection
-email_alert
+Quality Validation
+        ↓
+Data Profiling
+        ↓
+Anomaly Detection
+        ↓
+Drift Detection
+        ↓
+Email Alert Evaluation
+```
+
+The pipeline automatically performs:
+
+- Data Validation
+- Profiling
+- Anomaly Detection
+- Drift Detection
+- Email Alerts
+
+---
+
+# Generated Reports
+
+Reports are stored in:
+
+```text
+data/reports/
+```
+
+Generated outputs:
+
+```text
+quality_report_2024_01.json
+
+profile_report_2024_01.json
+
+anomaly_report_2024_01.json
+
+drift_report_jan_vs_feb.json
+```
+
+Example output:
+
+```text
+Running: python3 src/validation/basic_quality_checks.py
+
+Running: python3 src/profiling/profile_dataset.py
+
+Running: python3 src/profiling/anomaly_detection.py
+
+Running: python3 src/drift/drift_detection.py
+
+Running: python3 src/alerts/email_alert.py
+
+Data Quality pipeline completed successfully.
 ```
 
 ---
 
-## GitHub Actions
+# Running Dashboard
 
-The project includes GitHub Actions workflow automation.
+Launch Streamlit dashboard:
 
-Workflow stages:
+```bash
+streamlit run dashboard.py
+```
 
-1. Checkout repository
-2. Set up Python
-3. Install dependencies
-4. Download NYC Taxi datasets
-5. Run data quality pipeline
+Dashboard URL:
+
+```text
+http://localhost:8501
+```
 
 ---
 
-## Technology Stack
+# Email Alert Configuration
 
-### Programming
+SMTP Configuration:
 
-* Python
+```env
+SMTP_HOST=smtp.gmail.com
 
-### Data Processing
+SMTP_PORT=587
 
-* Pandas
-* NumPy
-* PyArrow
+SMTP_USER=your_email@gmail.com
 
-### Data Quality & Monitoring
+SMTP_PASSWORD=your_gmail_app_password
 
-* Rule-based validation
-* IQR anomaly detection
-* Evidently AI for drift detection
+ALERT_RECIPIENT=recipient@gmail.com
 
-### Alerting
+QUALITY_SCORE_THRESHOLD=99.0
+```
 
-* SMTP
-* Gmail App Password
-* python-dotenv
+---
 
-### Dashboard
+# GitHub Actions Automation
 
-* Streamlit
+The project includes automated CI/CD execution using GitHub Actions.
+
+Workflow:
+
+```text
+Push to Main Branch
+        │
+        ▼
+Install Dependencies
+        │
+        ▼
+Download Dataset
+        │
+        ▼
+Run Pipeline
+        │
+        ▼
+Generate Reports
+        │
+        ▼
+Send Email Alerts
+```
+
+Benefits:
+
+- Automated Execution
+- CI/CD Integration
+- Reproducible Pipelines
+- Continuous Data Quality Monitoring
+
+---
+
+# Sample Quality Results
+
+Dataset:
+
+```text
+yellow_tripdata_2024-01
+```
+
+Results:
+
+| Metric | Value |
+|----------|----------|
+| Total Records | 2,964,624 |
+| Rules Executed | 4 |
+| Rules Failed | 3 |
+| Quality Score | 98.91% |
+
+Failed Rules:
+
+- Positive Trip Distance
+- Non Negative Fare
+- Valid Passenger Count
+
+---
+
+# Technology Stack
+
+### Data Engineering
+
+- Python
+- Pandas
+- NumPy
+
+### Data Quality
+
+- Custom Validation Framework
+- Statistical Profiling
+
+### Monitoring
+
+- Email Alerts
+- Streamlit Dashboard
 
 ### Automation
 
-* GitHub Actions
+- GitHub Actions
 
-### Version Control
+### Storage
 
-* Git
-* GitHub
-
----
-
-## Sample Results
-
-### Quality Score
-
-```text
-98.91%
-```
-
-### Failed Quality Records
-
-* Invalid Trip Distance: 60,371
-* Negative Fare Amount: 37,448
-* Invalid Passenger Count: 31,525
-
-### Anomalies Detected
-
-* Trip Distance Outliers: 382,745
-* Fare Amount Outliers: 318,801
-* Total Amount Outliers: 363,621
-
-### Email Alert
-
-```text
-Email alert sent successfully when quality threshold was breached.
-```
+- Parquet Files
+- JSON Reports
 
 ---
 
-## Future Enhancements
+# Future Enhancements
 
-* Add JSON report attachment to alert email
-* Add Slack alert integration
-* Add Great Expectations validation
-* Add PyDeequ validation framework
-* Add Airflow or Dagster orchestration
-* Add cloud deployment on GCP or AWS
-* Add real-time streaming validation with Kafka
-* Add ML-based anomaly detection
-* Add historical trend dashboard
+### Data Engineering
+
+- Great Expectations Integration
+- Apache Airflow Orchestration
+- GCP Deployment
+- Data Catalog Integration
+
+### Monitoring
+
+- Slack Alerts
+- Microsoft Teams Alerts
+- Grafana Dashboards
+
+### Machine Learning
+
+- ML-based Anomaly Detection
+- Predictive Drift Monitoring
+
+### Cloud
+
+- GCS Storage
+- Cloud Run Deployment
+- Cloud Scheduler Automation
 
 ---
 
-## Author
+# Author
 
 Sugashini Kaliappan
 
-Senior Data Engineer | Data Science Graduate | Data Quality Engineering Enthusiast
+GitHub:
+
+https://github.com/SugashiniKaliappan
