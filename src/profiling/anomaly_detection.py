@@ -3,7 +3,8 @@ from pathlib import Path
 
 import pandas as pd
 
-BASE_DIR = Path("/Users/sugashinikaliappan/nyc-taxi-data-quality-platform")
+#BASE_DIR = Path("/Users/sugashinikaliappan/nyc-taxi-data-quality-platform")
+BASE_DIR = Path(__file__).resolve().parents[2]
 
 INPUT_FILE = (
     BASE_DIR / "data/raw/yellow_tripdata_2024-01.parquet"
