@@ -43,6 +43,97 @@ Streamlit Dashboard
 
 ---
 
+# Run Without Local Installation
+
+This project supports fully automated execution using GitHub Actions.
+
+No local Python installation, dependency setup, or dataset download is required.
+
+Anyone can execute the complete Data Quality pipeline directly from GitHub.
+
+## Run from GitHub
+
+1. Navigate to the repository
+
+```text
+https://github.com/SugashiniKaliappan/nyc-taxi-data-quality-platform
+```
+
+2. Open the **Actions** tab.
+
+3. Select:
+
+```text
+NYC Taxi Data Quality Pipeline
+```
+
+4. Click:
+
+```text
+Run workflow
+```
+
+5. GitHub Actions automatically performs:
+
+```text
+Checkout Repository
+        ↓
+Setup Python Environment
+        ↓
+Install Dependencies
+        ↓
+Download NYC Taxi Datasets
+        ↓
+Run Quality Validation
+        ↓
+Run Data Profiling
+        ↓
+Run Anomaly Detection
+        ↓
+Run Drift Detection
+        ↓
+Evaluate Email Alerts
+        ↓
+Generate Reports
+```
+
+## What Happens During Execution
+
+The workflow automatically:
+
+* Downloads January and February NYC Taxi datasets
+* Executes data quality validation checks
+* Generates dataset profiling reports
+* Detects statistical anomalies
+* Performs data drift analysis
+* Evaluates alert thresholds
+* Generates JSON reports
+* Sends email notifications when thresholds are breached
+
+## Generated Outputs
+
+After successful execution the following reports are generated:
+
+```text
+data/reports/
+
+├── quality_report_2024_01.json
+├── profile_report_2024_01.json
+├── anomaly_report_2024_01.json
+└── drift_report_jan_vs_feb.json
+```
+
+## Local Execution (Optional)
+
+Local setup is only required if you want to modify, extend, or test the code manually.
+
+```bash
+python3 run_pipeline.py
+```
+
+The GitHub Actions workflow provides a fully automated execution path and is the recommended way to run the platform.
+-------
+
 # Features
 
 ## Data Quality Validation
