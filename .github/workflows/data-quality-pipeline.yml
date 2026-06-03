@@ -30,5 +30,13 @@ jobs:
           curl -L -o data/raw/yellow_tripdata_2024-02.parquet https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-02.parquet
 
       - name: Run data quality pipeline
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          ALERT_RECIPIENT: ${{ secrets.ALERT_RECIPIENT }}
+          QUALITY_SCORE_THRESHOLD: ${{ secrets.QUALITY_SCORE_THRESHOLD }}
+ 
         run: |
           python3 run_pipeline.py
